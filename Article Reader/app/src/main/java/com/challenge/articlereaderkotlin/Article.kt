@@ -12,12 +12,19 @@ import java.util.*
 @RealmClass
 open class Article : RealmObject() {
 
+    private var read: Boolean = false
+
     @PrimaryKey
-    open var title: String? = null
-    open var authors: String? = null
-    open var website:String?=null
-    open var date:Date?=null
-    open var content: String?=null
-    open var image: String?=null
-    open var tags:RealmList<Tags>? = null
+    private var title: String? = null
+    private var authors: String? = null
+    private var website:String?=null
+    private var date:Date?=null
+    private var content: String?=null
+    private var image: String?=null
+    private var tags:RealmList<Tags>? = null
+
+
+    open fun getTitle():String?{
+        return title
+    }
 }
