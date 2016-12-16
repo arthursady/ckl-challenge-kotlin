@@ -35,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         else{
            AlertDialog.Builder(this)
             .setTitle("No Connection!")
-            .setMessage("You are not Connected to the Internet, please reconnect and try")
+            .setMessage("You are not Connected to the Internet, please check your connection"+
+                    " and try again")
             .setPositiveButton(android.R.string.ok,DialogInterface.OnClickListener {
                 dialogInterface, i ->  })
             .show()
