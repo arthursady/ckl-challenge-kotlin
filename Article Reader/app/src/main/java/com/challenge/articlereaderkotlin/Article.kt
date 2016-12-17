@@ -21,10 +21,34 @@ open class Article : RealmObject() {
     private var date:Date?=null
     private var content: String?=null
     private var image: String?=null
-    private var tags:RealmList<Tags>? = null
+    lateinit private var tags:RealmList<Tags>
 
 
     open fun getTitle():String?{
         return title
+    }
+
+    open fun getAuthors():String?{
+        return authors
+    }
+
+    open fun getWebsite():String?{
+        return website
+    }
+
+    open fun getDate():Date?{
+        return date
+    }
+
+    open fun getContent():String?{
+        return content
+    }
+
+    open fun getImage():String?{
+        return image
+    }
+
+    open fun getTags():RealmList<Tags>{
+        return tags
     }
 }

@@ -17,7 +17,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),DownloadListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         return networkInfo != null && networkInfo.isConnected
     }
 
-    fun downloadComplete (articles :ArrayList<Article>){
+    override fun downloadComplete (articles :ArrayList<Article>){
         var realm = Realm.getDefaultInstance()
         var dbArticles = realm.where(Article::class.java).findAll()
 
