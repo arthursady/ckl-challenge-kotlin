@@ -36,7 +36,7 @@ open class ArticleFragment() : Fragment(){
 
         unbinder=ButterKnife.bind(this,view)
 
-        var titleTextView: TextView = ButterKnife.findById(view,R.id.title)
+        var titleTextView: TextView = ButterKnife.findById(view,R.id.title_details)
         var tagsTextView: TextView = ButterKnife.findById(view,R.id.tags_detail);
         var imageView: ImageView = ButterKnife.findById(view,R.id.image_details);
         var authorsTextView: TextView = ButterKnife.findById(view,R.id.authors_detail);

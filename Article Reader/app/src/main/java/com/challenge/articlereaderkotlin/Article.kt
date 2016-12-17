@@ -51,4 +51,8 @@ open class Article : RealmObject() {
     open fun getTags():RealmList<Tags>{
         return tags
     }
+
+    open fun getReadState():Boolean{
+        return read
+    }
 }
