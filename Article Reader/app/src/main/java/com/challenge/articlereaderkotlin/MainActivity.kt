@@ -49,11 +49,20 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
         else{
            AlertDialog.Builder(this)
             .setTitle("No Connection!")
-            .setMessage("You are not Connected to the Internet, please check your connection"+
-                    " and try again")
+            .setMessage("You are not Connected to the Internet, couldn't load new articles")
             .setPositiveButton(android.R.string.ok,DialogInterface.OnClickListener {
                 dialogInterface, i ->  })
             .show()
+
+
+            var dbArticles = mRealm.where(Article::class.java).findAll()
+
+            if (dbArticles.size > 0) run {
+                var dbList = ArrayList<Article>()
+                dbList.addAll(mRealm.where(Article::class.java).findAll().
+                        subList(0,dbArticles.size))
+                showListFragment(dbList)
+            }
         }
 
     }
@@ -62,7 +71,6 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
         super.onDestroy()
         mRealm.close()
     }
-
 
     fun isNetworkconnected(): Boolean{
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
