@@ -5,7 +5,6 @@ import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 import io.realm.annotations.RealmClass
 import java.util.*
-import kotlin.comparisons.compareBy
 
 /**
  * Created by Arthur on 14/12/2016.

@@ -5,13 +5,9 @@ import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
-import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import butterknife.ButterKnife
-import butterknife.Unbinder
+import kotlinx.android.synthetic.main.article_details.view.*
 import java.text.SimpleDateFormat
 
 /**
@@ -20,7 +16,6 @@ import java.text.SimpleDateFormat
 open class ArticleFragment() : Fragment(){
 
     lateinit private var mArticle: Article
-    lateinit private var unbinder: Unbinder
 
     fun newInstance(article: Article): ArticleFragment{
         this.mArticle=article
@@ -34,24 +29,18 @@ open class ArticleFragment() : Fragment(){
 
         var view:View = inflater!!.inflate(R.layout.article_details,container,false)
 
-        unbinder=ButterKnife.bind(this,view)
-
-        var titleTextView: TextView = ButterKnife.findById(view,R.id.title_details)
-        var tagsTextView: TextView = ButterKnife.findById(view,R.id.tags_detail);
-        var imageView: ImageView = ButterKnife.findById(view,R.id.image_details);
-        var authorsTextView: TextView = ButterKnife.findById(view,R.id.authors_detail);
-        var websiteTextView: TextView = ButterKnife.findById(view,R.id.website_detail);
-        var contentTextView: TextView = ButterKnife.findById(view,R.id.content);
-        var dateTextView: TextView = ButterKnife.findById(view,R.id.date_detail);
 
         if ((mArticle.getImage()!= null)&& !(mArticle.getImage().equals("null"))){
 
-            imageView.setImageResource(getResources().getIdentifier(mArticle.getImage(),"drawable",
-                    getActivity().getPackageName()))
+            val id = context.resources.getIdentifier(mArticle.getImage(),
+                    "drawable",context.getPackageName())
+            view.image_details.setImageResource(id)
         }
         else{
-            imageView.setImageResource(getResources().getIdentifier("placeholder","drawable",
-                    getActivity().getPackageName()))
+            val id = context.resources.getIdentifier("placeholder",
+                    "drawable",context.getPackageName())
+            view.image_details.setImageResource(id)
+
         }
 
         var tags:String?=""
@@ -59,20 +48,18 @@ open class ArticleFragment() : Fragment(){
             tags=tags +"#"+i.toString()+" "
         }
 
-        tagsTextView.setText(tags)
-        titleTextView.setText(mArticle.getTitle())
-        authorsTextView.setText(mArticle.getAuthors())
-        websiteTextView.setText(mArticle.getWebsite())
-        contentTextView.setText(mArticle.getContent())
+        view.title_details.text=mArticle.getTitle()
+        view.tags_detail.text=tags
+        view.authors_detail.text=mArticle.getAuthors()
+        view.website_detail.text=mArticle.getWebsite()
+        view.content.text=mArticle.getContent()
 
         var dateFormat: SimpleDateFormat= SimpleDateFormat("MM/dd/yyyy")
-        dateTextView.setText(dateFormat.format(mArticle.getDate()))
-
+        view.date_detail.text=dateFormat.format(mArticle.getDate())
         return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        unbinder.unbind()
     }
 }
