@@ -35,12 +35,13 @@ class ArticleAdapter() : RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
         fun setData(article:Article){
-            itemView.title.text= article.getTitle()
-            itemView.authors.text=article.getAuthors()
-            itemView.website.text=article.getWebsite()
+            itemView.title.text= mContext.getString(R.string.title_tag) + article.getTitle()
+            itemView.authors.text=mContext.getString(R.string.authors_tag) + article.getAuthors()
+            itemView.website.text=mContext.getString(R.string.website_tag) + article.getWebsite()
 
             val dateFormat = SimpleDateFormat("MM/dd/yyyy")
-            itemView.date.text=dateFormat.format(article.getDate())
+            itemView.date.text=mContext.getString(R.string.date_tag) + dateFormat.
+                    format(article.getDate())
 
             if((article.getImage()!=null) && !(article.getImage().equals("null"))){
                 val id = mContext.resources.getIdentifier(article.getImage(),
