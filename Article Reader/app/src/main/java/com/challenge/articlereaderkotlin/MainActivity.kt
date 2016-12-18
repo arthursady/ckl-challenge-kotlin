@@ -7,6 +7,8 @@ import android.content.DialogInterface
 import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import io.realm.Realm
@@ -17,18 +19,23 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
-class MainActivity : AppCompatActivity(),DownloadListener {
+class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interface {
 
+    lateinit var mListFragment : ListFragment
+    lateinit var mRealm : Realm
+    var mProgressDialog : ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Realm.init(this)
+        mRealm=Realm.getDefaultInstance()
+
         if(isNetworkconnected()){
-            var progressDialog = ProgressDialog(this)
-            progressDialog.setMessage("Please wait...")
-            progressDialog.setCancelable(false)
-            progressDialog.show()
+            mProgressDialog = ProgressDialog(this)
+            mProgressDialog?.setMessage("Please wait...")
+            mProgressDialog?.setCancelable(false)
+            mProgressDialog?.show()
 
             makeRetrofitCalls()
         }
@@ -44,6 +51,12 @@ class MainActivity : AppCompatActivity(),DownloadListener {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        mRealm.close()
+    }
+
+
     fun isNetworkconnected(): Boolean{
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
@@ -51,27 +64,46 @@ class MainActivity : AppCompatActivity(),DownloadListener {
     }
 
     override fun downloadComplete (articles :ArrayList<Article>){
-        var realm = Realm.getDefaultInstance()
-        var dbArticles = realm.where(Article::class.java).findAll()
+
+        var dbArticles = mRealm.where(Article::class.java).findAll()
 
         if (dbArticles.size > 0) run {
             for (i in articles.indices) {
-                if (realm.where(Article::class.java).equalTo("title", articles[i]
+                if (mRealm.where(Article::class.java).equalTo("title", articles[i]
                         .getTitle()).findFirst() == null) {
-                    realm.beginTransaction()
-                    realm.copyToRealmOrUpdate(articles[i])
-                    realm.commitTransaction()
+                    mRealm.beginTransaction()
+                    mRealm.copyToRealmOrUpdate(articles[i])
+                    mRealm.commitTransaction()
                 }
             }
         }
         else{
             for (i in articles.indices) {
-                realm.beginTransaction()
-                realm.copyToRealmOrUpdate(articles[i])
-                realm.commitTransaction()
+                mRealm.beginTransaction()
+                mRealm.copyToRealmOrUpdate(articles[i])
+                mRealm.commitTransaction()
             }
         }
-        realm.close()
+        var realmResults = mRealm.where(Article::class.java).findAll()
+        var dbList = ArrayList<Article>()
+
+        dbList.addAll(mRealm.where(Article::class.java).findAll().subList(0,realmResults.size))
+
+        showListFragment(dbList)
+
+        mProgressDialog?.hide()
+
+
+
+    }
+
+    fun showListFragment(articles: ArrayList<Article>){
+        mListFragment = ListFragment().newInstance(articles)
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.root_layout,mListFragment,"articleList")
+                .commit()
+
     }
 
     fun makeRetrofitCalls(){
@@ -100,6 +132,18 @@ class MainActivity : AppCompatActivity(),DownloadListener {
 
     }
 
+    override fun onArticleClicked(article: Article) {
+        val detailsFragment = ArticleFragment().newInstance(article)
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.root_layout,detailsFragment,"articleDetails")
+                .addToBackStack(null)
+                .commit()
+    }
+
+    override fun onArticleSelected(article: Article, view: View, context: Context) {
+        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
 
 }

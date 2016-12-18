@@ -13,27 +13,35 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ArticleAdapter(var mContext:Context, private var mArticleList: ArrayList<Article>) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
+class ArticleAdapter() : RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
+
+
 
     private val Read = 1
     private val Unread = 0
     lateinit var mLayoutInflater: LayoutInflater
     lateinit var mListener : Interface
+    lateinit var mContext:Context
+    lateinit private var mArticleList: ArrayList<Article>
 
-    init{
+    constructor(context: Context, list: ArrayList<Article>):this(){
+        mContext=context
+        mArticleList=list
         mLayoutInflater= LayoutInflater.from(mContext)
         mListener = mContext as Interface
+
     }
+
 
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
         fun setData(article:Article){
-            itemView.title.text= "Title: "+article.getTitle()
-            itemView.authors.text="Authors: "+article.getAuthors()
-            itemView.website.text="Website"+article.getWebsite()
+            itemView.title.text= article.getTitle()
+            itemView.authors.text=article.getAuthors()
+            itemView.website.text=article.getWebsite()
 
             val dateFormat = SimpleDateFormat("MM/dd/yyyy")
-            itemView.date.text="Date: "+dateFormat.format(article.getDate())
+            itemView.date.text=dateFormat.format(article.getDate())
 
             if((article.getImage()!=null) && !(article.getImage().equals("null"))){
                 val id = mContext.resources.getIdentifier(article.getImage(),

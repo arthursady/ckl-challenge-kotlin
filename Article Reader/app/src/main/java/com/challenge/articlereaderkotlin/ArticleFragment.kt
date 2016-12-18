@@ -1,8 +1,9 @@
 package com.challenge.articlereaderkotlin
 
-import android.app.Fragment
+
 import android.os.Bundle
 import android.support.annotation.Nullable
+import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
@@ -30,9 +31,8 @@ open class ArticleFragment() : Fragment(){
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
 
-        return super.onCreateView(inflater, container, savedInstanceState)
 
-        var view:View=inflater!!.inflate(R.layout.article_details,container,false)
+        var view:View = inflater!!.inflate(R.layout.article_details,container,false)
 
         unbinder=ButterKnife.bind(this,view)
 
