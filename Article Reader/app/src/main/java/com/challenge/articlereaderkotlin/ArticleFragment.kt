@@ -44,7 +44,7 @@ open class ArticleFragment() : Fragment(){
         var contentTextView: TextView = ButterKnife.findById(view,R.id.content);
         var dateTextView: TextView = ButterKnife.findById(view,R.id.date_detail);
 
-        if ((mArticle.getImage()!=null)&& !(mArticle.getImage().equals("null"))){
+        if ((mArticle.getImage()!= null)&& !(mArticle.getImage().equals("null"))){
 
             imageView.setImageResource(getResources().getIdentifier(mArticle.getImage(),"drawable",
                     getActivity().getPackageName()))

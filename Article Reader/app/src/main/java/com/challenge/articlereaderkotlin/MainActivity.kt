@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.google.gson.GsonBuilder
@@ -20,6 +21,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 
 class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interface {
+
+    val mSortDate = 1
+    val mSortTitle = 2
+    val mSortAuthor = 3
+    val mSortWebsite = 4
 
     lateinit var mListFragment : ListFragment
     lateinit var mRealm : Realm
@@ -130,6 +136,36 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
             }
         })
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.byDate -> {
+                mListFragment.sortList(mSortDate)
+                supportFragmentManager.beginTransaction().detach(mListFragment).commit()
+                supportFragmentManager.beginTransaction().attach(mListFragment).commit()
+            }
+
+            R.id.byTitle ->{
+                mListFragment.sortList(mSortTitle)
+                supportFragmentManager.beginTransaction().detach(mListFragment).commit()
+                supportFragmentManager.beginTransaction().attach(mListFragment).commit()
+            }
+
+            R.id.byAuthor ->{
+                mListFragment.sortList(mSortAuthor)
+                supportFragmentManager.beginTransaction().detach(mListFragment).commit()
+                supportFragmentManager.beginTransaction().attach(mListFragment).commit()
+            }
+
+            R.id.byWebsite ->{
+                mListFragment.sortList(mSortWebsite)
+                supportFragmentManager.beginTransaction().detach(mListFragment).commit()
+                supportFragmentManager.beginTransaction().attach(mListFragment).commit()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onArticleClicked(article: Article) {

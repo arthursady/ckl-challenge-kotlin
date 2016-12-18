@@ -6,9 +6,7 @@ import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import java.util.*
 
 /**
@@ -27,9 +25,25 @@ class ListFragment() : Fragment() {
         mArticleList=articles
     }
 
+    fun sortList(method:Int){
+        when(method){
+            1 -> mArticleList.sortBy { article -> article.getDate() }
+            2 -> mArticleList.sortBy { article -> article.getTitle() }
+            3 -> mArticleList.sortBy { article -> article.getAuthors()}
+            4 -> mArticleList.sortBy { article -> article.getWebsite()}
+        }
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        menu?.clear()
+        inflater?.inflate(R.menu.menu_main,menu)
     }
 
     @Nullable
