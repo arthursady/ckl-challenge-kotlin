@@ -8,6 +8,7 @@ import android.net.ConnectivityManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.PopupMenu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -169,6 +170,10 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
     }
 
     override fun onArticleClicked(article: Article) {
+        mRealm.beginTransaction()
+        article.setRead(true)
+        mRealm.commitTransaction()
+
         val detailsFragment = ArticleFragment().newInstance(article)
         supportFragmentManager
                 .beginTransaction()
@@ -178,7 +183,35 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
     }
 
     override fun onArticleSelected(article: Article, view: View, context: Context) {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        var popup = PopupMenu(context, view)
+        if(article.getReadState()){
+            popup.menuInflater.inflate(R.menu.popup_menu_read,popup.menu)
+        }
+        else{
+            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+        }
+
+        popup.show()
+
+        popup.setOnMenuItemClickListener {
+            Toast.makeText(context, "You clicked: "+ title, Toast.LENGTH_SHORT )
+
+            if(article.getReadState()){
+                mRealm.beginTransaction()
+                article.setRead(false)
+                mRealm.commitTransaction()
+            }
+            else{
+                mRealm.beginTransaction()
+                article.setRead(true)
+                mRealm.commitTransaction()
+            }
+
+            supportFragmentManager.beginTransaction().detach(mListFragment).commit()
+            supportFragmentManager.beginTransaction().attach(mListFragment).commit()
+
+            true
+        }
     }
 
 

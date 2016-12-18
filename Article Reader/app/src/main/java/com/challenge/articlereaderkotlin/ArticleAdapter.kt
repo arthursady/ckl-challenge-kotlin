@@ -32,7 +32,6 @@ class ArticleAdapter() : RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
 
     }
 
-
     inner class ViewHolder(view : View) : RecyclerView.ViewHolder(view){
 
         fun setData(article:Article){
@@ -56,12 +55,16 @@ class ArticleAdapter() : RecyclerView.Adapter<ArticleAdapter.ViewHolder>(){
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         var itemView : View = mLayoutInflater.inflate(R.layout.list_element,parent,false)
+
+        when (viewType){
+            Read -> itemView = mLayoutInflater.inflate(R.layout.list_element_read,parent,false)
+            Unread -> itemView = mLayoutInflater.inflate(R.layout.list_element,parent,false)
+        }
+
         return ViewHolder(itemView)
     }
-
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.setData(mArticleList[position])

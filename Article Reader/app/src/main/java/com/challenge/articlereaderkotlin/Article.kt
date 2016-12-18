@@ -25,6 +25,10 @@ open class Article : RealmObject() {
     lateinit private var tags:RealmList<Tags>
 
 
+    open fun setRead(status: Boolean) {
+        read = status
+    }
+
     open fun getTitle():String{
         return title
     }
