@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.PopupMenu
+import android.util.DisplayMetrics
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
@@ -72,6 +73,15 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
         mRealm.close()
     }
 
+    fun getScreenSize():Double{
+        var dm = DisplayMetrics()
+        this.windowManager.defaultDisplay.getMetrics(dm)
+        val x = Math.pow((dm.widthPixels / dm.xdpi).toDouble(), 2.0)
+        val y = Math.pow((dm.heightPixels / dm.ydpi).toDouble(), 2.0)
+        val screenInches = Math.sqrt(x+y)
+        return screenInches
+    }
+
     fun isNetworkconnected(): Boolean{
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = connMgr.activeNetworkInfo
@@ -114,10 +124,19 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
 
     fun showListFragment(articles: ArrayList<Article>){
         mListFragment = ListFragment().newInstance(articles)
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.root_layout,mListFragment,"articleList")
-                .commit()
+
+        if(getScreenSize()>7){
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.list_container_largescreens,mListFragment,"articleList")
+                    .commit()
+        }
+        else {
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.root_layout, mListFragment, "articleList")
+                    .commit()
+        }
 
     }
 
@@ -183,11 +202,23 @@ class MainActivity : AppCompatActivity(),DownloadListener,ArticleAdapter.Interfa
         mRealm.commitTransaction()
 
         val detailsFragment = ArticleFragment().newInstance(article)
-        supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.root_layout,detailsFragment,"articleDetails")
-                .addToBackStack(null)
-                .commit()
+
+        if(getScreenSize()<7){
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.root_layout,detailsFragment,"articleDetails")
+                    .addToBackStack(null)
+                    .commit()
+        }
+        else{
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.root_layout,detailsFragment,"articleDetails")
+                    .commit()
+
+            supportFragmentManager.beginTransaction().detach(mListFragment).commit()
+            supportFragmentManager.beginTransaction().attach(mListFragment).commit()
+        }
     }
 
     override fun onArticleSelected(article: Article, view: View, context: Context) {
