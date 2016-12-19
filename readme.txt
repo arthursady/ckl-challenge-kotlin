@@ -1,1 +1,0 @@
-Android Challenge Convertido para Kotlin para treinamento.
