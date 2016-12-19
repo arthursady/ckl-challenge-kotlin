@@ -12,8 +12,10 @@ import java.util.*
 @RealmClass
 open class Article : RealmObject() {
 
+    /*Defined variable to keep track of the article state either Read or Unread*/
     private var read: Boolean = false
 
+    /*model variable definitions to match the imported model from the challenge URL*/
     @PrimaryKey
     lateinit private var title: String
     lateinit private var authors: String
@@ -21,13 +23,17 @@ open class Article : RealmObject() {
     lateinit private var date:Date
     lateinit private var content: String
     private var image: String?=null
+
+    /*This model posses an internal model that is composed of a list of tags*/
     lateinit private var tags:RealmList<Tags>
 
 
+    /*Setter for the ReadState manipulation*/
     open fun setRead(status: Boolean) {
         read = status
     }
 
+    /*getters for the other internal variables*/
     open fun getTitle():String{
         return title
     }
